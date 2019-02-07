@@ -66,13 +66,25 @@ With `crux-kill-other-buffers`: (dired buffer didn't get killed)
 
 ![aza-today](https://user-images.githubusercontent.com/17734314/52390960-a10a9b80-2acd-11e9-90c2-c15f4fcb06c8.gif)
 
+I work with huge org files that involve many plain timestamp. It's
+easy to get previous/next days using prefix arguments e.g +2 or
+-4. But it's painful if you need to get previous/next timestamp based
+on certain date.
+
 This function will insert today's date if invoked without arguments
 and no active region. Prefix arguments specifies how many days to
 move, arguments can be negative, negative means previous day. If
 region selected, make fake today's date according to the date under
 region.
 
+You need to load [ts.el](https://github.com/alphapapa/ts.el) for this
+to work. I decide to use ts.el rather than `format-time-string`. It's
+more readable, beautiful and less code. To duplicate line/region
+faster, I use [crux-duplicate-current-line-or-region](https://github.com/bbatsov/crux)
+
 ``` elisp
+(require 'ts) 
+
 (defun aza-today (&optional arg)
 "Insert today's date.
 
