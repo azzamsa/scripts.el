@@ -115,7 +115,7 @@ you never invoke mark region before (e.g after Emacs start up).
 
 Most of the time my org first heading name is the same as filename. So I
 made this function. My habit is to separate word in filename by
-dash. You can modify to your liking.
+dash. If you want more robust function, take the second.
 
 ``` elisp
 (defun insert-filename-as-heading ()
@@ -125,6 +125,22 @@ dash. You can modify to your liking.
    (capitalize
     (replace-regexp-in-string "-" " " (file-name-sans-extension (buffer-name))))))
 
+```
+
+![s-header-name](https://user-images.githubusercontent.com/17734314/52455913-04a3d000-2b85-11e9-88d0-b66ffa35c7f8.gif)
+
+This is the more robust function. It can deal with almost separator in
+filename. You have to load [s.el](https://github.com/magnars/s.el) to
+make this function works. Many packages already use s.el, probably
+it's installed in your Emacs.
+
+``` elisp
+(defun insert-filename-as-heading ()
+  "Take current filename (word separated by dash) as heading."
+  (interactive)
+  (insert
+   (capitalize
+    (s-join " " (s-split-words (file-name-sans-extension (buffer-name)))))))
 ```
 
 ## Programming
