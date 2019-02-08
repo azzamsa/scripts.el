@@ -2,7 +2,7 @@
 
 A collection of my tiny but useful Emacs Lisp code.
 
-Most of the code here extracted from my [.emacs.d](https://github.com/azzamsa/emacs.d/)
+Most of the code here extracted from my .emacs.d [aza-script.el](https://github.com/azzamsa/emacs.d/blob/master/aza-packages/aza-scripts.el)
 
 <!-- markdown-toc start - Don't edit this section. Run M-x markdown-toc-refresh-toc -->
 **Table of Contents**
