@@ -16,8 +16,9 @@ Most of the code here extracted from my .emacs.d [aza-script.el](https://github.
         - [Insert filename as heading](#insert-filename-as-heading)
     - [Programming](#programming)
         - [Compile UI file to py](#compile-ui-file-to-py)
-    - [Misc](#misc)
+    - [Text Manipulation](#text-manipulation)
         - [Remove secrets from region](#remove-secrets-from-region)
+        - [Smart delete line](#smart-delete-line)
 
 <!-- markdown-toc end -->
 
@@ -163,7 +164,7 @@ Emacs."
                    (concat "--output=" default-directory outputfile ".py"))))
 ```
 
-## Misc
+## Text Manipulation
 
 ### Remove secrets from region
 
@@ -188,4 +189,36 @@ Of course you need to put `(list-my-secrets)` in your non published files.
     (save-excursion
       (replace-string (car pair) (cdr pair)))))
 
+```
+
+### Smart delete line
+
+Rather than having separate key to delete line, or having to invoke
+prefix-argument. You can use [crux-smart-kill-line](https://github.com/bbatsov/crux/blob/308f17d914e2cd79cbc809de66d02b03ceb82859/crux.el#L199)
+which will "kill to the end of the line and kill whole line on the next
+call". But if you prefer `delete` instead of `kill`, you can use the
+code below.
+
+For point-to-string operation (kill/delete) I recommend to use [zop-to-char](https://github.com/thierryvolpiatto/zop-to-char)
+
+``` elisp
+(defun aza-delete-line ()
+  "Delete from current position to end of line without pushing to `kill-ring'."
+  (interactive)
+  (delete-region (point) (line-end-position)))
+
+(defun aza-delete-whole-line ()
+  "Delete whole line without pushing to kill-ring."
+  (interactive)
+  (delete-region (line-beginning-position) (line-end-position)))
+
+(defun crux-smart-delete-line ()
+  "Kill to the end of the line and kill whole line on the next call."
+  (interactive)
+  (let ((orig-point (point)))
+    (move-end-of-line 1)
+    (if (= orig-point (point))
+        (aza-delete-whole-line)
+      (goto-char orig-point)
+      (aza-delete-line))))
 ```
