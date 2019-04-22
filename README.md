@@ -15,6 +15,7 @@ Most of the code here extracted from my .emacs.d [aza-script.el](https://github.
     - [Org](#org)
         - [Insert filename as heading](#insert-filename-as-heading)
     - [Programming](#programming)
+        - [Open External Terminal and Tmux from Dired](#open-external-terminal-and-tmux-from-dired)
         - [Compile UI file to py](#compile-ui-file-to-py)
     - [Text Manipulation](#text-manipulation)
         - [Remove secrets from region](#remove-secrets-from-region)
