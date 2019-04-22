@@ -146,6 +146,29 @@ it's installed in your Emacs.
 
 ## Programming
 
+### Open External Terminal and Tmux from Dired
+
+![term-here](https://user-images.githubusercontent.com/17734314/56504785-dd359000-6543-11e9-9a2d-48e42861c701.gif)
+
+If no external terminal opened, start one. Else attach to it and open
+new pane in current path
+
+But if you prefer to attach to current pane (don't open new pane) and
+change directory path your self. Use:
+
+`urxvtc -e bash -c "tmux -q has-session && exec tmux attach-session -d || exec tmux new-session -n$USER -s$USER@$HOSTNAME"`
+
+PS: You need `urxvtd` (daemon) running at OS startup. Because we're using
+`urxvtc` (client)
+
+``` elisp
+(defun term-here ()
+  (interactive)
+  (start-process "" nil "urxvtc"
+                 "-e" "bash"
+                 "-c" "tmux -q has-session && exec tmux new-window || exec tmux new-session -n$USER -s$USER@$HOSTNAME"))
+```
+
 ### Compile UI file to py
 
 Compile Qt user interfaces to Python code directly from Emacs. Put
