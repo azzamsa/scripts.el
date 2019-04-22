@@ -216,6 +216,8 @@ Of course you need to put `(list-my-secrets)` in your non published files.
 
 ### Smart delete line
 
+![crux-smart-delete](https://user-images.githubusercontent.com/17734314/56504768-cc851a00-6543-11e9-835e-fc74c08185f8.gif)
+
 Rather than having separate key to delete line, or having to invoke
 prefix-argument. You can use [crux-smart-kill-line](https://github.com/bbatsov/crux/blob/308f17d914e2cd79cbc809de66d02b03ceb82859/crux.el#L199)
 which will "kill to the end of the line and kill whole line on the next
