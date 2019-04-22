@@ -152,9 +152,9 @@ it's installed in your Emacs.
 ![term-here](https://user-images.githubusercontent.com/17734314/56504785-dd359000-6543-11e9-9a2d-48e42861c701.gif)
 
 If no external terminal opened, start one. Else attach to it and open
-new pane in current path
+new window in current path
 
-But if you prefer to attach to current pane (don't open new pane) and
+But if you prefer to attach to current window (don't open new window) and
 change directory path your self. Use:
 
 `urxvtc -e bash -c "tmux -q has-session && exec tmux attach-session -d || exec tmux new-session -n$USER -s$USER@$HOSTNAME"`
