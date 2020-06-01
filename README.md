@@ -1,5 +1,7 @@
 # Scripts
 
+> 📢 **Info**: I have migrated these script into [my blog](https://azzamsa.com/blog/scripts-el)
+
 A collection of my tiny but useful Emacs Lisp code.
 
 Most of the code here extracted from my .emacs.d [aza-script.el](https://github.com/azzamsa/emacs.d/blob/master/aza-packages/aza-scripts.el)
