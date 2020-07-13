@@ -1,6 +1,6 @@
 # Scripts
 
-> 📢 **Info**: I have migrated these script into [my blog](https://azzamsa.com/blog/scripts-el)
+> 📢 **Info**: I have migrated these script into [my blog](https://azzamsa.com/n/scripts-el/)
 
 A collection of my tiny but useful Emacs Lisp code.
 
