@@ -1,9 +1,5 @@
-(require 'cl-lib)
 (require 's)
-(require 'f)
 (require 'ts)
-(require 'request)
-(require 'secrets.el)
 
 (defun save-all-buffers-silently ()
   (save-some-buffers t))
@@ -41,6 +37,7 @@ If region selected, parse region as today's date pivot."
         (delete-region (region-beginning) (region-end)))
     (insert (ts-format "%A, %B %e, %Y" (ts-adjust 'day arg date)))))
 
+;;;###autoload
 (defun insert-filename-as-heading ()
   "Take current filename (word separated by dash) as heading."
   (interactive)
@@ -48,14 +45,17 @@ If region selected, parse region as today's date pivot."
    (capitalize
     (s-join " " (s-split-words (file-name-sans-extension (buffer-name)))))))
 
+;;;###autoload
 (defun now ()
   (interactive)
   (insert (format-time-string "%F %H:%M")))
 
+;;;###autoload
 (defun hour ()
   (interactive)
   (insert (format-time-string "%H:%M")))
 
+;;;###autoload
 (defun rm-mysecrets ()
   "Remove all confidential information."
   (interactive)
@@ -63,23 +63,13 @@ If region selected, parse region as today's date pivot."
     (save-excursion
       (replace-string (car pair) (cdr pair)))))
 
+;;;###autoload
 (defun light-set-value ()
   "Set light value directly inside Emacs"
   (interactive)
   (let* ((current-value (s-trim (shell-command-to-string "light -G")))
          (light-value (read-string "Set Value: " current-value)))
     (start-process "" nil "light" "-S" light-value)))
-
-(defun pyqt-compile-ui ()
-  "Compile Qt5 user interfaces to Python code directly from
-Emacs"
-  (interactive)
-  (let ((inputfile (dired-get-filename))
-        (outputfile
-         (file-name-sans-extension
-          (file-name-nondirectory (dired-get-filename)))))
-    (start-process "" nil "pyuic5" inputfile
-                   (concat "--output=" default-directory outputfile "_ui.py"))))
 
 (defun start-mpv (path &optional playlist-p)
   "Start mpv with specified arguments"
@@ -90,21 +80,25 @@ Emacs"
     (message "%s" (s-concat cmd path))
     (call-process-shell-command (s-concat cmd (shell-quote-argument path)) nil 0)))
 
+;;;###autoload
 (defun mpv ()
   "Play a file in current line"
   (interactive)
   (start-mpv (dired-get-filename)))
 
+;;;###autoload
 (defun mpv-dir ()
   "Play all multimedia files in current directory"
   (interactive)
   (start-mpv default-directory))
 
+;;;###autoload
 (defun mpv-playlist ()
   "Play a playlist in current line"
   (interactive)
   (start-mpv (dired-get-filename) t))
 
+;;;###autoload
 (defun what-day ()
   "Show day name from spesific time"
   (interactive)
@@ -113,54 +107,10 @@ Emacs"
         (year (read-string "Year: " (number-to-string (ts-year (ts-now))))))
     (message (ts-day-name (ts-parse (s-join " " (list date month year)))))))
 
-(defun ask-github ()
-  "GET Github notification API."
-  (let* ((github-pass (password-store-get-field "code/github" "token"))
-         (archive-response (request "https://api.github.com/notifications?all"
-                             :parser 'json-read
-                             :headers `(("Authorization" . ,(concat "token" " " github-pass))
-                                        ("Content-Type" . "application/json"))
-                             :sync t))
-         (data (request-response-data archive-response))
-         (status (request-response-status-code archive-response)))
-    (if (eq status 200)
-        data
-      404)))
-
-(defun github-show-notification ()
-  "Check if Github notification exist without opening browser
-Reduce Distraction."
-  (interactive)
-  (let ((result (ask-github)))
-    (if (not (equal result 404))
-        (if (equal result '[])
-            (message "No notification.")
-          (message "Yey, You have notification!"))
-      (message "Request failed"))))
-
-(defun ask-archive (url)
-  "Get request to Wayback API"
-  (let* ((archive-response (request (concat "http://archive.org/wayback/available?url=" url)
-                             :parser 'json-read
-                             :sync t))
-         (data (request-response-data archive-response))
-         (status (request-response-status-code archive-response)))
-    (if (eq status 200)
-        data
-      404)))
-
-(defun wayback-save-page ()
-  "Archive page to Wayback"
-  (interactive)
-  (let* ((url (read-string "Url: "))
-         (response (nth 1 (nth 1 (ask-archive url)))))
-    (if response
-        (message "Webpage had an archive")
-      (message "Webpage archived"))))
-
 (defun play-reminder-sound ()
   (start-process "" nil "mpv" coin-work-medium-sound))
 
+;;;###autoload
 (defun remind-me ()
   "Notify with a sound after certain time"
   (interactive)
@@ -168,6 +118,7 @@ Reduce Distraction."
     (message "I will remind you after %s" time)
     (run-at-time time nil #'play-reminder-sound)))
 
+;;;###autoload
 (defun to-snake-case (start end)
   "Change selected text to snake case format"
   (interactive "r")
@@ -176,17 +127,5 @@ Reduce Distraction."
         (delete-region start end)
         (insert (s-snake-case camel-case-str)))
     (message "No region selected")))
-
-(defun connect-remote ()
-  "Open dired buffer in selected remote machine"
-  (interactive)
-  (let* ((selected-machine (completing-read "connect to: " (mapcar 'car remote-machines)))
-         (machine-data (cdr (assoc selected-machine remote-machines)))
-         (username (plist-get machine-data :username))
-         (ip-address (plist-get machine-data :ip)))
-    (if (string= username "root")
-        (dired (concat "/ssh:" username "@" ip-address ":/"))
-      (dired (concat "/ssh:" username "@" ip-address ":/home/" username "/")))
-    (message "Connected")))
 
 (provide 'scripts.el)
